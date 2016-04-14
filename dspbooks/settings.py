@@ -64,8 +64,8 @@ NEWSPIDER_MODULE = 'dspbooks.spiders'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
-FILES_STORE = os.path.join(appdirs.user_data_dir(), 'books')
+ITEM_PIPELINES = {'dspbooks.pipelines.DspbooksPipeline': 200}
+FILES_STORE = appdirs.user_data_dir()
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -16,6 +16,6 @@ class DSPBooksSpider(scrapy.Spider):
                 for  x in quoted_links]
         for link in rel_links:
             if link.endswith('/'):
-                yield scrapy.Request(url=link)
+                yield scrapy.Request(url=link, callback=self.parse)
             else:
                 yield BookItem(file_urls=[link,])
