@@ -5,8 +5,3 @@ Scrapy spider to download all books related to DSP books on http://serv.yanchick
 [![Code Climate](https://codeclimate.com/github/gpalsingh/dspbooksspider/badges/gpa.svg)](https://codeclimate.com/github/gpalsingh/dspbooksspider)
 [![Test Coverage](https://codeclimate.com/github/gpalsingh/dspbooksspider/badges/coverage.svg)](https://codeclimate.com/github/gpalsingh/dspbooksspider/coverage)
 [![Issue Count](https://codeclimate.com/github/gpalsingh/dspbooksspider/badges/issue_count.svg)](https://codeclimate.com/github/gpalsingh/dspbooksspider)
-
-## TODO
- - [ ] Add setup script.
- - [x] Structure downloads directory.
- - [x] Save files by name.
