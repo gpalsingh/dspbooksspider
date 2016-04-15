@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import appdirs
+import ctypes
+import logging
 import os
+import subprocess
+import sys
+
+from colorama import Fore, Style, init
+from time import sleep
+
+init(autoreset=True)
 
 # Scrapy settings for dspbooks project
 #
@@ -65,7 +74,53 @@ NEWSPIDER_MODULE = 'dspbooks.spiders'
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {'dspbooks.pipelines.DspbooksPipeline': 200}
-FILES_STORE = appdirs.user_data_dir()
+FILES_STORE = os.path.join(appdirs.user_data_dir(), 'dspbooksspider')
+
+
+# make shortcut to files
+def make_shortcut():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('[%(levelname)s] %(message)s')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    success = True
+    shortcut_name = 'saved_books'
+
+    if not os.path.exists(FILES_STORE):
+        os.makedirs(FILES_STORE)
+
+    if sys.platform.lower().startswith('win'):
+        src = unicode(os.path.join(os.curdir, shortcut_name))
+        if not os.path.exists(src):
+            kdll = ctypes.windll.LoadLibrary("kernel32.dll")        
+            dest = unicode(FILES_STORE)
+            ecode = kdll.CreateSymbolicLinkW(src, dest, 1)
+            if ecode == 0:
+                success = False
+    else:
+        cm = 'ln -sf "{}" "{}"'.format(FILES_STORE, shortcut_name)
+        ecode = subprocess.call(cm, shell=True)
+        if ecode == 1:
+            success = False
+        else:
+            # Removes strange recursive symlink
+            cm = 'rm -f "{}/dspbooksspider"'.format(FILES_STORE)
+            subprocess.Popen(cm, shell=True)
+
+    if success:
+        t = Fore.GREEN + Style.BRIGHT
+        logger.info(t + 'Link to downloaded data made with name: "{}"'.format(shortcut_name))
+    else:
+        logger.setLevel(logging.ERROR)
+        logger.error(Fore.RED + '''Failed to make shortcut.
+The data is saved at {}'''.format(FILES_STORE))
+
+    # give user chance to see the message
+    sleep(4)
+make_shortcut()
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

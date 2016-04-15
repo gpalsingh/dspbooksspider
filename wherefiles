@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+import appdirs
+import os
+
+print 'Your files are downloaded in : '
+print os.path.join(appdirs.user_data_dir(), 'dspbooksspider')

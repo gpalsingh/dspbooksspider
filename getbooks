@@ -1,0 +1,4 @@
+#!/usr/bin/env python
+
+import subprocess
+subprocess.call('scrapy crawl dspbooks', shell=True)
